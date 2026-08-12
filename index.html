@@ -711,7 +711,6 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 .mobile-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--cyan));box-shadow:0 0 14px rgba(201,162,39,.9)}
 @media(max-width:880px){.mobile-progress{display:block}}
 .dotnav{background:rgba(7,11,19,.35);border:1px solid rgba(201,162,39,.16);border-radius:999px;padding:14px 8px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.dotnav i{position:absolute;left:50%;top:14px;width:1px;height:0;transform:translateX(-50%);background:linear-gradient(180deg,var(--gold),var(--cyan));transition:height .15s linear;z-index:-1;box-shadow:0 0 8px rgba(201,162,39,.5)}
 .dotnav a{position:relative;z-index:1}
 
 /* rute kapal di panel peta */
@@ -833,9 +832,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 .atmo-olive.pt-mosaic{background-image:radial-gradient(ellipse 60% 50% at 50% 112%, rgba(126,156,96,.11), transparent 66%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Crect x='1' y='1' width='19' height='19' fill='none' stroke='%233FD8E8' stroke-width='.7' opacity='.06'/%3E%3Ccircle cx='32.5' cy='32.5' r='9' fill='none' stroke='%23C9A227' stroke-width='.7' opacity='.07'/%3E%3Cpath d='M0 44V0M44 44V0' stroke='%23F5F3EE' stroke-width='.5' opacity='.05'/%3E%3C/svg%3E")}
 
 /* ================= REVISI v4 — EFEK 3D ================= */
-#hero3d{position:absolute;right:3%;bottom:8%;width:min(360px,32vw);height:min(360px,32vw);z-index:1;pointer-events:none;opacity:.9}
-#hero3d canvas{width:100% !important;height:100% !important;display:block}
-@media(max-width:880px){#hero3d{display:none}}
+
 /* tilt holografik kartu */
 .tilt3d{transform-style:preserve-3d;will-change:transform;transition:transform .16s ease-out, box-shadow .3s ease}
 .tilt3d.tilt-glow{box-shadow:0 26px 70px rgba(0,0,0,.55), 0 0 40px rgba(201,162,39,.20)}
@@ -1092,13 +1089,12 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 
 <!-- ===== DOT NAV (diisi JS) ===== -->
 <div class="mobile-progress" aria-hidden="true"><i id="progBar"></i></div>
-<nav class="dotnav" id="dotnav" aria-label="Navigasi babak"><i id="dotFill"></i></nav>
+<nav class="dotnav" id="dotnav" aria-label="Navigasi babak"></nav>
 
 <!-- ================= HERO ================= -->
 <main>
 <section class="hero" id="hero"><div class="section-atmo atmo-sea" aria-hidden="true"></div>
-  <div id="hero3d" aria-hidden="true"></div>
-  <div class="hero-kicker reveal"><b>ΟΜΗΡΟΣ · HOMER</b> &nbsp;EPOS ODYSSEIA — BUKU I</div>
+    <div class="hero-kicker reveal"><b>ΟΜΗΡΟΣ · HOMER</b> &nbsp;EPOS ODYSSEIA — BUKU I</div>
   <h1 class="nostos reveal" data-delay="1">NOSTOS</h1>
   <p class="hero-sub reveal" data-delay="2">
     <b>νόστος</b> — perjalanan pulang. Sepuluh tahun perang, dua puluh tahun pengembaraan,
@@ -1336,8 +1332,8 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
                   <svg viewBox="0 0 240 240"><use href="#ill-siren"/></svg>
                 </div>
       </div>
+          <div class="reel-progress" aria-hidden="true"><i></i></div>
     </div>
-    <div class="reel-progress" aria-hidden="true"><i></i></div>
   </div>
 </section>
 
@@ -1372,8 +1368,8 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
           <svg viewBox="0 0 240 240"><use href="#ill-scylla"/></svg>
         </div>
       </div>
+          <div class="reel-progress" aria-hidden="true"><i></i></div>
     </div>
-    <div class="reel-progress" aria-hidden="true"><i></i></div>
   </div>
 </section>
 
@@ -1566,7 +1562,6 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 </footer>
 
 <div class="cursor-trail" id="cursorTrail" aria-hidden="true"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* ============ DATA: waypoints (babak) ============ */
 const WAYPOINTS = [
@@ -1867,14 +1862,12 @@ const WAYPOINTS = [
 /* progress scroll: bar mobile + garis dotnav */
 (function(){
   const bar=document.getElementById('progBar');
-  const fill=document.getElementById('dotFill');
   const root=document.documentElement;
   let raf=null;
   function update(){
     const max=root.scrollHeight-root.clientHeight;
     const p=max>0? root.scrollTop/max : 0;
     if(bar) bar.style.width=(p*100)+'%';
-    if(fill) fill.style.height=Math.max(0,(p*100))+'%';
     raf=null;
   }
   addEventListener('scroll',()=>{ if(!raf) raf=requestAnimationFrame(update); },{passive:true});
@@ -1960,114 +1953,21 @@ const WAYPOINTS = [
   }
   let raf = null;
   function onScroll(){ if(!raf) raf = requestAnimationFrame(()=>{ raf=null; update(); }); }
-  addEventListener('scroll', onScroll, {passive:true});
-  addEventListener('resize', onScroll);
-  addEventListener('load', onScroll);
-  update();
-})();
-
-/* ================= REVISI v4 — THREE.JS: KAPAL 3D, MATA CYCLOPS, VORTEX, TILT ================= */
-(function(){
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const desktopQ = matchMedia('(min-width:881px)');
-  if(reduced || !desktopQ.matches || typeof THREE === 'undefined') {
-    window.__nostos3d = { webgl:false, scenes:0, reason: reduced?'reduced':'mobile-or-no-three' };
-    return;
-  }
-  let webglOK = false;
-  try {
-    const c = document.createElement('canvas');
-    webglOK = !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
-  } catch(e){ webglOK = false; }
-  if(!webglOK){ window.__nostos3d = { webgl:false, scenes:0, reason:'no-webgl' }; return; }
-
-  const scenes = [];
-  let last = 0;
-
-  function makeRenderer(container){
-    const r = new THREE.WebGLRenderer({ alpha:true, antialias:false, powerPreference:'low-power' });
-    r.setPixelRatio(Math.min(devicePixelRatio||1, 1.5));
-    r.setSize(container.clientWidth||300, container.clientHeight||300);
-    container.appendChild(r.domElement);
-    return r;
-  }
-  function makeCam(fov){
-    const c = new THREE.PerspectiveCamera(fov, 1, 0.1, 100);
-    return c;
-  }
-  function resizeScene(s){
-    const w = s.el.clientWidth||300, h = s.el.clientHeight||300;
-    s.renderer.setSize(w,h);
-    s.camera.aspect = w/h; s.camera.updateProjectionMatrix();
-  }
-
-  /* ---- scene 1: kapal hero ---- */
-  (function(){
-    const el = document.getElementById('hero3d');
-    if(!el) return;
-    const scene = new THREE.Scene();
-    const cam = makeCam(42); cam.position.set(0, 0.5, 4.6); cam.lookAt(0, 0.15, 0);
-    const ren = makeRenderer(el);
-    const ship = new THREE.Group();
-    const shape = new THREE.Shape();
-    shape.moveTo(-1.7,-0.38); shape.lineTo(1.7,-0.38); shape.lineTo(1.2,0.28); shape.lineTo(0,0.62); shape.lineTo(-1.2,0.28); shape.closePath();
-    const hullGeo = new THREE.ExtrudeGeometry(shape, {depth:0.72, bevelEnabled:true, bevelThickness:0.06, bevelSize:0.05, bevelSegments:2});
-    hullGeo.translate(0,0,-0.36);
-    const hull = new THREE.Mesh(hullGeo, new THREE.MeshBasicMaterial({color:0x0e1524, transparent:true, opacity:.88}));
-    const edge = new THREE.LineSegments(new THREE.EdgesGeometry(hullGeo), new THREE.LineBasicMaterial({color:0xC9A227}));
-    ship.add(hull); ship.add(edge);
-    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.035,1.55,6), new THREE.MeshBasicMaterial({color:0xE8C170}));
-    mast.position.set(0.1,1.0,0); ship.add(mast);
-    const sail = new THREE.Mesh(new THREE.PlaneGeometry(0.95,1.05,10,10), new THREE.MeshBasicMaterial({color:0x3FD8E8, wireframe:true, transparent:true, opacity:.55}));
-    sail.position.set(0.42,1.12,0); sail.rotation.y = -0.4; ship.add(sail);
-    const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.07,10,10), new THREE.MeshBasicMaterial({color:0xE8C170}));
-    lamp.position.set(0,0.6,0.5); ship.add(lamp);
-    ship.scale.setScalar(0.95);
-    scene.add(ship);
-    scenes.push({ el, scene, camera:cam, renderer:ren, ship, active:false, kind:'ship',
-      update(t){ ship.position.y = Math.sin(t*0.7)*0.09; ship.rotation.z = Math.sin(t*0.5)*0.035; ship.rotation.y += (ship.userData.ty - ship.rotation.y)*0.06; } });
-  })();
-
-  /* ---- observer: aktifkan scene saat masuk viewport ---- */
-  const io = new IntersectionObserver(es => {
-    es.forEach(e => {
-      const s = scenes.find(x => x.el === e.target);
-      if(!s) return;
-      s.active = e.isIntersecting;
+  /* budget scroll reel dinamis: tinggi reel = sisa geser horizontal + viewport,
+     supaya reel SELALU mentok ke panel terakhir sebelum turun ke section berikutnya */
+  function syncReel(){
+    if(reduced || mobileQ.matches) return;
+    reels.forEach(reel=>{
+      const track = reel.querySelector('.reel-track');
+      const shift = track.scrollWidth - innerWidth;
+      if(shift > 0) reel.style.height = (shift + innerHeight) + 'px';
     });
-  }, { rootMargin:'240px 0px 240px 0px' });
-  scenes.forEach(s => io.observe(s.el));
-
-  /* ---- loop 30fps + resize ---- */
-  function loop(t){
-    requestAnimationFrame(loop);
-    if(document.hidden) return;
-    if(t - last < 33) return;   // cap 30fps
-    last = t;
-    const sec = t/1000;
-    for(const s of scenes){
-      if(!s.active) continue;
-      if(typeof s.update === 'function') s.update(sec);
-      s.renderer.render(s.scene, s.camera);
-    }
   }
-  requestAnimationFrame(loop);
-  addEventListener('resize', () => scenes.forEach(resizeScene));
-
-  /* ---- parallax kapal ikut mouse ---- */
-  if(matchMedia('(hover:hover)').matches){
-    let mx = 0;
-    addEventListener('mousemove', e => { mx = (e.clientX/innerWidth - 0.5); }, {passive:true});
-    const shipScene = scenes.find(s => s.kind === 'ship');
-    if(shipScene) shipScene.ship.userData.ty = 0;
-    // update target rot via interval ringan (tidak perlu render tambahan)
-    setInterval(() => {
-      const s = scenes.find(x => x.kind === 'ship');
-      if(s && s.ship) s.ship.userData.ty = mx * 0.5;
-    }, 200);
-  }
-
-  window.__nostos3d = { webgl:true, scenes:scenes.length, reasons:scenes.map(s=>s.kind) };
+  addEventListener('scroll', onScroll, {passive:true});
+  addEventListener('resize', ()=>{ syncReel(); onScroll(); });
+  addEventListener('load', ()=>{ syncReel(); onScroll(); });
+  syncReel();
+  update();
 })();
 
 /* ================= REVISI v4 — TILT 3D KARTU (hologram) ================= */
