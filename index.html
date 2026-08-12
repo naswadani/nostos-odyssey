@@ -1510,8 +1510,19 @@ const WAYPOINTS = [
     es.forEach(e=>{
       if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
     });
-  },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  },{threshold:0, rootMargin:'0px 0px 12% 0px'});
   els.forEach(el=>io.observe(el));
+  /* safety net: elemen yang sudah lewat/masuk area tampil dipaksa reveal (anti-stuck) */
+  const t=setInterval(()=>{
+    let pending=0;
+    els.forEach(el=>{
+      if(el.classList.contains('in')) return;
+      pending++;
+      const r=el.getBoundingClientRect();
+      if(r.top < innerHeight*.94){ el.classList.add('in'); io.unobserve(el); pending--; }
+    });
+    if(!pending) clearInterval(t);
+  },1000);
 })();
 
 /* ============ TRANSLATION TOGGLE ============ */
