@@ -594,12 +594,10 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 /* ---- LAYER ATMOSFER PER SECTION ---- */
 .section,.hero{isolation:isolate}
 .section-atmo{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.section>:not(.section-atmo):not(.col-wire):not(.grec),.hero>*{position:relative;z-index:1}
+.section>:not(.section-atmo),.hero>*{position:relative;z-index:1}
 .chapter-grid{position:relative;z-index:1}
 .grec{z-index:1}
-.col-wire{position:absolute;z-index:1;top:8%;bottom:8%;width:56px;opacity:.55;pointer-events:none;animation:col-blink 4.5s ease-in-out infinite}
-.section:not(.in-view) .section-atmo,.section:not(.in-view) .section-atmo *,.section:not(.in-view) .col-wire{animation-play-state:paused}
-
+.section:not(.in-view) .section-atmo,.section:not(.in-view) .section-atmo *,.section:not(.in-view) 
 /* api/abu — Troya */
 .atmo-fire i{position:absolute;bottom:-12px;width:3px;height:3px;border-radius:50%;background:#ffb84d;box-shadow:0 0 12px 3px rgba(255,140,40,.75);opacity:0;animation:atmo-rise 7s linear infinite}
 .atmo-fire i:nth-child(1){left:7%;animation-delay:0s;animation-duration:6.4s}
@@ -698,13 +696,8 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 #penutup.harbor-on .atmo-harbor::after{opacity:1}
 #penutup.harbor-on .grec{filter:drop-shadow(0 0 34px rgba(201,162,39,.6))}
 
-/* kolom wireframe hologram */
-.col-wire svg{height:100%;width:100%;overflow:visible}
-.col-wire.left{left:2%}
-.col-wire.right{right:2%}
-.col-wire.tall{width:74px}
 @keyframes col-blink{0%,100%{opacity:.3}50%{opacity:.85}}
-@media(max-width:880px){.col-wire{display:none}}
+
 
 /* ---- NAVIGASI: progress mobile + dotnav line ---- */
 .mobile-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:80;background:rgba(201,162,39,.12);display:none}
@@ -814,15 +807,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 .pt-meander{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M0 22h10v-8h8V6H6v14' fill='none' stroke='%23C9A227' stroke-width='1' opacity='.07'/%3E%3Cpath d='M28 6H18v8h-8v8h12V8' fill='none' stroke='%23C9A227' stroke-width='1' opacity='.05'/%3E%3C/svg%3E");background-size:28px 28px}
 .pt-mosaic{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Crect x='1' y='1' width='19' height='19' fill='none' stroke='%233FD8E8' stroke-width='.7' opacity='.06'/%3E%3Ccircle cx='32.5' cy='32.5' r='9' fill='none' stroke='%23C9A227' stroke-width='.7' opacity='.07'/%3E%3Cpath d='M0 44V0M44 44V0' stroke='%23F5F3EE' stroke-width='.5' opacity='.05'/%3E%3C/svg%3E");background-size:44px 44px}
 
-/* ---- ornamen sudut (amphora, lyra) ---- */
-.orn-corner{position:absolute;z-index:0;opacity:.38;pointer-events:none}
-.orn-corner svg{width:52px;height:52px;overflow:visible}
-.orn-corner.tl{top:16px;left:18px}
-.orn-corner.br{bottom:16px;right:18px}
-@media(max-width:880px){.orn-corner{display:none}}
 
-/* ---- kolom Ionic (volute) ---- */
-.col-wire.ionic .capital{stroke:#3FD8E8;stroke-width:1;opacity:.8}
 
 /* ---- route rail: terisi progresif saat scroll ---- */
 .map-panel.open #routeAnim{animation:none !important;transition:stroke-dashoffset 2.6s cubic-bezier(.22,1,.36,1)}
@@ -1150,8 +1135,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
     <path d="M0 17h40l8 8h24l8-8h40" fill="none" stroke="url(#goldGrad)" stroke-width="1.6" opacity=".85"/>
   </svg>
 </div>
-<section class="section" id="troy">
-  <div class="orn-corner tl" aria-hidden="true"><svg viewBox="0 0 52 52" fill="none"><path d="M21 10h10M20 10c-4 6-8 16-8 24 0 4 3 6 8 6h12c5 0 8-2 8-6 0-8-4-18-8-24" stroke="#C9A227" stroke-width="1.3" opacity=".9"/><path d="M18 20c8 3 8 9 16 9M18 30c8 2 8 8 16 8" stroke="#3FD8E8" stroke-width=".8" opacity=".7"/><path d="M24 8c0-2 2-4 2-4s2 2 2 4c0 1.4-1 2.6-2 2.6S24 9.4 24 8z" stroke="#C9A227" stroke-width="1"/></svg></div><svg viewBox="0 0 52 52" fill="none"><path d="M21 10h10M20 10c-4 6-8 16-8 24 0 4 3 6 8 6h12c5 0 8-2 8-6 0-8-4-18-8-24" stroke="#C9A227" stroke-width="1.3" opacity=".9"/><path d="M18 20c8 3 8 9 16 9M18 30c8 2 8 8 16 8" stroke="#3FD8E8" stroke-width=".8" opacity=".7"/><path d="M24 8c0-2 2-4 2-4s2 2 2 4c0 1.4-1 2.6-2 2.6S24 9.4 24 8z" stroke="#C9A227" stroke-width="1"/></svg></div>><div class="section-atmo atmo-fire" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="col-wire left tall" aria-hidden="true"><svg viewBox="0 0 60 320" fill="none"><path d="M18 0v320M42 0v320" stroke="#3FD8E8" stroke-width="1" opacity=".75" stroke-dasharray="3 5"/><path d="M8 28h50M8 292h50" stroke="#3FD8E8" stroke-width=".8" opacity=".55"/><path d="M13 50h34M13 270h34" stroke="#C9A227" stroke-width=".7" opacity=".45"/><ellipse cx="30" cy="28" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/><ellipse cx="30" cy="292" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/></svg></div>
+<section class="section" id="troy"><div class="section-atmo atmo-fire" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="grec">Ι</div>
   <div class="chapter-grid">
     <div class="chapter-copy">
@@ -1254,8 +1238,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
     <path d="M0 17h40l8 8h24l8-8h40" fill="none" stroke="url(#goldGrad)" stroke-width="1.6" opacity=".85"/>
   </svg>
 </div>
-<section class="section split-layout" id="circe">
-  <div class="orn-corner br" aria-hidden="true"><svg viewBox="0 0 52 52" fill="none"><path d="M18 40V16c0-6 4-10 8-10s8 4 8 10v6" stroke="#C9A227" stroke-width="1.3" opacity=".9"/><path d="M14 20h20v10a10 10 0 0 1-20 0z" stroke="#C9A227" stroke-width="1.3" opacity=".9"/><path d="M18 40c0 5 4 8 8 8s8-3 8-8" stroke="#3FD8E8" stroke-width=".9" opacity=".75"/><path d="M22 20v10M26 20v10M30 20v10" stroke="#3FD8E8" stroke-width=".7" opacity=".8"/></svg></div><div class="section-atmo atmo-enchant" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<section class="section split-layout" id="circe"><div class="section-atmo atmo-enchant" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
   <div class="grec">Ε</div>
   <div class="chapter-grid">
     <div class="chapter-copy">
@@ -1282,7 +1265,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
   </svg>
 </div>
 <section class="section zoom-section" id="nekya">
-  <div class="zoom-vignette" aria-hidden="true"></div><div class="section-atmo atmo-souls" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="col-wire ionic right tall" aria-hidden="true"><svg viewBox="0 0 60 340" fill="none"><path d="M18 34v306M42 34v306" stroke="#3FD8E8" stroke-width="1" opacity=".75" stroke-dasharray="3 5"/><path d="M8 52h50M8 310h50" stroke="#3FD8E8" stroke-width=".8" opacity=".55"/><path d="M13 74h34M13 288h34" stroke="#C9A227" stroke-width=".7" opacity=".45"/><ellipse cx="30" cy="310" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/><path class="capital" d="M18 34c-7-3-8-12-3-17M18 34c7-3 8-12 3-17" /><path class="capital" d="M42 34c7-3 8-12 3-17M42 34c-7-3-8-12-3-17"/><ellipse cx="18" cy="15" rx="5" ry="3" fill="none" stroke="#3FD8E8" stroke-width=".9" opacity=".7"/><ellipse cx="42" cy="15" rx="5" ry="3" fill="none" stroke="#3FD8E8" stroke-width=".9" opacity=".7"/><path d="M10 42h40" stroke="#C9A227" stroke-width=".7" opacity=".5"/></svg></div>
+  <div class="zoom-vignette" aria-hidden="true"></div><div class="section-atmo atmo-souls" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="grec left">Ϝ</div>
   <div class="chapter-grid flip">
     <div class="chapter-copy">
@@ -1406,7 +1389,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
     <path d="M0 17h40l8 8h24l8-8h40" fill="none" stroke="url(#goldGrad)" stroke-width="1.6" opacity=".85"/>
   </svg>
 </div>
-<section class="section diag-layout" id="calypso" data-pace="calm"><div class="section-atmo atmo-warm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="col-wire ionic right tall" aria-hidden="true"><svg viewBox="0 0 60 340" fill="none"><path d="M18 34v306M42 34v306" stroke="#3FD8E8" stroke-width="1" opacity=".75" stroke-dasharray="3 5"/><path d="M8 52h50M8 310h50" stroke="#3FD8E8" stroke-width=".8" opacity=".55"/><path d="M13 74h34M13 288h34" stroke="#C9A227" stroke-width=".7" opacity=".45"/><ellipse cx="30" cy="310" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/><path class="capital" d="M18 34c-7-3-8-12-3-17M18 34c7-3 8-12 3-17" /><path class="capital" d="M42 34c7-3 8-12 3-17M42 34c-7-3-8-12-3-17"/><ellipse cx="18" cy="15" rx="5" ry="3" fill="none" stroke="#3FD8E8" stroke-width=".9" opacity=".7"/><ellipse cx="42" cy="15" rx="5" ry="3" fill="none" stroke="#3FD8E8" stroke-width=".9" opacity=".7"/><path d="M10 42h40" stroke="#C9A227" stroke-width=".7" opacity=".5"/></svg></div>
+<section class="section diag-layout" id="calypso" data-pace="calm"><div class="section-atmo atmo-warm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="grec left">Ι</div>
   <div class="chapter-grid flip">
     <div class="chapter-copy">
@@ -1539,8 +1522,6 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 </div>
 <section class="section" id="penutup" data-pace="calm" style="text-align:center;padding-top:150px;padding-bottom:40px">
   <div class="section-atmo atmo-harbor" aria-hidden="true"></div>
-  <div class="col-wire left" aria-hidden="true"><svg viewBox="0 0 60 320" fill="none"><path d="M18 0v320M42 0v320" stroke="#3FD8E8" stroke-width="1" opacity=".75" stroke-dasharray="3 5"/><path d="M8 28h50M8 292h50" stroke="#3FD8E8" stroke-width=".8" opacity=".55"/><path d="M13 50h34M13 270h34" stroke="#C9A227" stroke-width=".7" opacity=".45"/><ellipse cx="30" cy="28" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/><ellipse cx="30" cy="292" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/></svg></div>
-  <div class="col-wire right" aria-hidden="true"><svg viewBox="0 0 60 320" fill="none"><path d="M18 0v320M42 0v320" stroke="#3FD8E8" stroke-width="1" opacity=".75" stroke-dasharray="3 5"/><path d="M8 28h50M8 292h50" stroke="#3FD8E8" stroke-width=".8" opacity=".55"/><path d="M13 50h34M13 270h34" stroke="#C9A227" stroke-width=".7" opacity=".45"/><ellipse cx="30" cy="28" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/><ellipse cx="30" cy="292" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/></svg></div>
   <div class="grec" style="left:50%;transform:translateX(-50%);right:auto">Ξ</div>
   <h2 class="section-title reveal" style="max-width:760px;margin-left:auto;margin-right:auto">Nostos: <em>Pulang Adalah Mengingat Siapa Kita</em></h2>
   <p class="body reveal" data-delay="1" style="margin:0 auto;max-width:58ch">
@@ -1897,7 +1878,6 @@ const WAYPOINTS = [
   const reels = [...document.querySelectorAll('[data-reel]')];
   const zooms = [...document.querySelectorAll('.zoom-section')];
   const arts = [...document.querySelectorAll('.chapter-art svg')];
-  const cols = [...document.querySelectorAll('.col-wire svg')];
   const routeAnim = document.getElementById('routeAnim');
   const root = document.documentElement;
 
@@ -1935,12 +1915,6 @@ const WAYPOINTS = [
         const r = svg.getBoundingClientRect();
         const t = (vh - r.top) / (vh + r.height);
         const off = (Math.max(0, Math.min(1, t)) - .5) * -34;
-        svg.style.transform = 'translateY(' + off + 'px)';
-      }
-      for(const svg of cols){
-        const r = svg.getBoundingClientRect();
-        const t = (vh - r.top) / (vh + r.height);
-        const off = (Math.max(0, Math.min(1, t)) - .5) * -64;
         svg.style.transform = 'translateY(' + off + 'px)';
       }
     }
