@@ -823,6 +823,20 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 .atmo-warm.pt-meander{background-image:radial-gradient(ellipse 70% 58% at 50% 112%, rgba(201,162,39,.15), transparent 66%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M0 22h10v-8h8V6H6v14' fill='none' stroke='%23C9A227' stroke-width='1' opacity='.07'/%3E%3Cpath d='M28 6H18v8h-8v8h12V8' fill='none' stroke='%23C9A227' stroke-width='1' opacity='.05'/%3E%3C/svg%3E")}
 .atmo-olive.pt-mosaic{background-image:radial-gradient(ellipse 60% 50% at 50% 112%, rgba(126,156,96,.11), transparent 66%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Crect x='1' y='1' width='19' height='19' fill='none' stroke='%233FD8E8' stroke-width='.7' opacity='.06'/%3E%3Ccircle cx='32.5' cy='32.5' r='9' fill='none' stroke='%23C9A227' stroke-width='.7' opacity='.07'/%3E%3Cpath d='M0 44V0M44 44V0' stroke='%23F5F3EE' stroke-width='.5' opacity='.05'/%3E%3C/svg%3E")}
 
+
+/* ================= REVISI v4 — EFEK 3D ================= */
+#hero3d{position:absolute;right:3%;bottom:8%;width:min(360px,32vw);height:min(360px,32vw);z-index:1;pointer-events:none;opacity:.9}
+#hero3d canvas{width:100% !important;height:100% !important;display:block}
+#eye3d{position:absolute;right:-16px;bottom:-14px;width:150px;height:150px;pointer-events:none;z-index:2}
+#eye3d canvas{width:100% !important;height:100% !important;display:block}
+#vortex3d{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:230px;height:230px;pointer-events:none;z-index:2;opacity:.85}
+#vortex3d canvas{width:100% !important;height:100% !important;display:block}
+@media(max-width:880px){#hero3d,#eye3d,#vortex3d{display:none}}
+/* tilt holografik kartu */
+.tilt3d{transform-style:preserve-3d;will-change:transform;transition:transform .16s ease-out, box-shadow .3s ease}
+.tilt3d.tilt-glow{box-shadow:0 26px 70px rgba(0,0,0,.55), 0 0 40px rgba(201,162,39,.20)}
+@media(hover:none),(prefers-reduced-motion:reduce){.tilt3d{transform:none !important}}
+
 </style>
 </head>
 <body>
@@ -1080,6 +1094,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 <!-- ================= HERO ================= -->
 <main>
 <section class="hero" id="hero"><div class="section-atmo atmo-sea" aria-hidden="true"></div>
+  <div id="hero3d" aria-hidden="true"></div>
   <div class="hero-kicker reveal"><b>ΟΜΗΡΟΣ · HOMER</b> &nbsp;EPOS ODYSSEIA — BUKU I</div>
   <h1 class="nostos reveal" data-delay="1">NOSTOS</h1>
   <p class="hero-sub reveal" data-delay="2">
@@ -1201,6 +1216,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
       <div class="quote-chip reveal" data-delay="3">Sikelia · negeri Cyclops</div>
     </div>
     <div class="chapter-art reveal" data-delay="2">
+      <div id="eye3d" aria-hidden="true"></div>
       <div class="halo"></div>
       <svg viewBox="0 0 240 240"><use href="#ill-cyclops"/></svg>
     </div>
@@ -1313,6 +1329,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
         <div class="quote-chip reveal" data-delay="1">Selat antara Sikelia &amp; Italia</div>
       </div>
       <div class="reel-panel reel-panel-art">
+        <div id="vortex3d" aria-hidden="true"></div>
         <div class="halo">
       </div>
     </div>
@@ -1542,6 +1559,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 </footer>
 
 <div class="cursor-trail" id="cursorTrail" aria-hidden="true"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* ============ DATA: waypoints (babak) ============ */
 const WAYPOINTS = [
@@ -1941,6 +1959,171 @@ const WAYPOINTS = [
   addEventListener('load', onScroll);
   update();
 })();
+
+
+/* ================= REVISI v4 — THREE.JS: KAPAL 3D, MATA CYCLOPS, VORTEX, TILT ================= */
+(function(){
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const desktopQ = matchMedia('(min-width:881px)');
+  if(reduced || !desktopQ.matches || typeof THREE === 'undefined') {
+    window.__nostos3d = { webgl:false, scenes:0, reason: reduced?'reduced':'mobile-or-no-three' };
+    return;
+  }
+  let webglOK = false;
+  try {
+    const c = document.createElement('canvas');
+    webglOK = !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
+  } catch(e){ webglOK = false; }
+  if(!webglOK){ window.__nostos3d = { webgl:false, scenes:0, reason:'no-webgl' }; return; }
+
+  const scenes = [];
+  let last = 0;
+
+  function makeRenderer(container){
+    const r = new THREE.WebGLRenderer({ alpha:true, antialias:false, powerPreference:'low-power' });
+    r.setPixelRatio(Math.min(devicePixelRatio||1, 1.5));
+    r.setSize(container.clientWidth||300, container.clientHeight||300);
+    container.appendChild(r.domElement);
+    return r;
+  }
+  function makeCam(fov){
+    const c = new THREE.PerspectiveCamera(fov, 1, 0.1, 100);
+    return c;
+  }
+  function resizeScene(s){
+    const w = s.el.clientWidth||300, h = s.el.clientHeight||300;
+    s.renderer.setSize(w,h);
+    s.camera.aspect = w/h; s.camera.updateProjectionMatrix();
+  }
+
+  /* ---- scene 1: kapal hero ---- */
+  (function(){
+    const el = document.getElementById('hero3d');
+    if(!el) return;
+    const scene = new THREE.Scene();
+    const cam = makeCam(42); cam.position.set(0, 0.5, 4.6); cam.lookAt(0, 0.15, 0);
+    const ren = makeRenderer(el);
+    const ship = new THREE.Group();
+    const shape = new THREE.Shape();
+    shape.moveTo(-1.7,-0.38); shape.lineTo(1.7,-0.38); shape.lineTo(1.2,0.28); shape.lineTo(0,0.62); shape.lineTo(-1.2,0.28); shape.closePath();
+    const hullGeo = new THREE.ExtrudeGeometry(shape, {depth:0.72, bevelEnabled:true, bevelThickness:0.06, bevelSize:0.05, bevelSegments:2});
+    hullGeo.translate(0,0,-0.36);
+    const hull = new THREE.Mesh(hullGeo, new THREE.MeshBasicMaterial({color:0x0e1524, transparent:true, opacity:.88}));
+    const edge = new THREE.LineSegments(new THREE.EdgesGeometry(hullGeo), new THREE.LineBasicMaterial({color:0xC9A227}));
+    ship.add(hull); ship.add(edge);
+    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.035,1.55,6), new THREE.MeshBasicMaterial({color:0xE8C170}));
+    mast.position.set(0.1,1.0,0); ship.add(mast);
+    const sail = new THREE.Mesh(new THREE.PlaneGeometry(0.95,1.05,10,10), new THREE.MeshBasicMaterial({color:0x3FD8E8, wireframe:true, transparent:true, opacity:.55}));
+    sail.position.set(0.42,1.12,0); sail.rotation.y = -0.4; ship.add(sail);
+    const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.07,10,10), new THREE.MeshBasicMaterial({color:0xE8C170}));
+    lamp.position.set(0,0.6,0.5); ship.add(lamp);
+    ship.scale.setScalar(0.95);
+    scene.add(ship);
+    scenes.push({ el, scene, camera:cam, renderer:ren, ship, active:false, kind:'ship',
+      update(t){ ship.position.y = Math.sin(t*0.7)*0.09; ship.rotation.z = Math.sin(t*0.5)*0.035; ship.rotation.y += (ship.userData.ty - ship.rotation.y)*0.06; } });
+  })();
+
+  /* ---- scene 2: mata Cyclops ---- */
+  (function(){
+    const el = document.getElementById('eye3d');
+    if(!el) return;
+    const scene = new THREE.Scene();
+    const cam = makeCam(45); cam.position.set(0,0,3.6);
+    const ren = makeRenderer(el);
+    const g = new THREE.Group();
+    const wire = new THREE.Mesh(new THREE.SphereGeometry(1,18,13), new THREE.MeshBasicMaterial({color:0xff3b22, wireframe:true, transparent:true, opacity:.85}));
+    const core = new THREE.Mesh(new THREE.SphereGeometry(0.5,14,10), new THREE.MeshBasicMaterial({color:0xff8a4a, transparent:true, opacity:.55}));
+    g.add(wire, core);
+    scene.add(g);
+    const s = { el, scene, camera:cam, renderer:ren, g, active:false, kind:'eye', scale:0.4, target:0.4,
+      update(t){ g.rotation.y = t*0.5; g.rotation.x = Math.sin(t*0.4)*0.15; this.scale += (this.target - this.scale)*0.06; g.scale.setScalar(this.scale); } };
+    scenes.push(s);
+  })();
+
+  /* ---- scene 3: vortex Scylla ---- */
+  (function(){
+    const el = document.getElementById('vortex3d');
+    if(!el) return;
+    const scene = new THREE.Scene();
+    const cam = makeCam(45); cam.position.set(0,0.4,4.2); cam.lookAt(0,0,0);
+    const ren = makeRenderer(el);
+    const g = new THREE.Group();
+    const torus = new THREE.Mesh(new THREE.TorusGeometry(1.25,0.15,10,28), new THREE.MeshBasicMaterial({color:0x3FD8E8, wireframe:true, transparent:true, opacity:.9}));
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.62,0.8,30), new THREE.MeshBasicMaterial({color:0xC9A227, wireframe:true, transparent:true, opacity:.5}));
+    ring.rotation.x = -Math.PI/2.2;
+    const core2 = new THREE.Mesh(new THREE.SphereGeometry(0.28,10,8), new THREE.MeshBasicMaterial({color:0x3FD8E8, transparent:true, opacity:.4}));
+    g.add(torus, ring, core2);
+    scene.add(g);
+    const s = { el, scene, camera:cam, renderer:ren, g, active:false, kind:'vortex', scale:0.3, target:0.3,
+      update(t){ g.rotation.z = t*0.7; torus.rotation.x = 1.25 + Math.sin(t*0.6)*0.08; ring.rotation.z = -t*0.4; g.position.y = Math.sin(t*0.5)*0.06; this.scale += (this.target-this.scale)*0.06; g.scale.setScalar(this.scale); } };
+    scenes.push(s);
+  })();
+
+  /* ---- observer: aktifkan scene saat masuk viewport ---- */
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      const s = scenes.find(x => x.el === e.target);
+      if(!s) return;
+      s.active = e.isIntersecting;
+      if(s.kind === 'eye' || s.kind === 'vortex') s.target = e.isIntersecting ? 1.55 : 0.4;
+    });
+  }, { rootMargin:'240px 0px 240px 0px' });
+  scenes.forEach(s => io.observe(s.el));
+
+  /* ---- loop 30fps + resize ---- */
+  function loop(t){
+    requestAnimationFrame(loop);
+    if(document.hidden) return;
+    if(t - last < 33) return;   // cap 30fps
+    last = t;
+    const sec = t/1000;
+    for(const s of scenes){
+      if(!s.active) continue;
+      if(typeof s.update === 'function') s.update(sec);
+      s.renderer.render(s.scene, s.camera);
+    }
+  }
+  requestAnimationFrame(loop);
+  addEventListener('resize', () => scenes.forEach(resizeScene));
+
+  /* ---- parallax kapal ikut mouse ---- */
+  if(matchMedia('(hover:hover)').matches){
+    let mx = 0;
+    addEventListener('mousemove', e => { mx = (e.clientX/innerWidth - 0.5); }, {passive:true});
+    const shipScene = scenes.find(s => s.kind === 'ship');
+    if(shipScene) shipScene.ship.userData.ty = 0;
+    // update target rot via interval ringan (tidak perlu render tambahan)
+    setInterval(() => {
+      const s = scenes.find(x => x.kind === 'ship');
+      if(s && s.ship) s.ship.userData.ty = mx * 0.5;
+    }, 200);
+  }
+
+  window.__nostos3d = { webgl:true, scenes:scenes.length, reasons:scenes.map(s=>s.kind) };
+})();
+
+/* ================= REVISI v4 — TILT 3D KARTU (hologram) ================= */
+(function(){
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hover = matchMedia('(hover:hover)').matches;
+  if(reduced || !hover) return;
+  const cards = document.querySelectorAll('.greek-box, .translation, .bleed-layout .chapter-copy');
+  cards.forEach(card => {
+    card.classList.add('tilt3d');
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left)/r.width - 0.5;
+      const py = (e.clientY - r.top)/r.height - 0.5;
+      card.style.transform = 'perspective(1000px) rotateX(' + (-py*7) + 'deg) rotateY(' + (px*9) + 'deg)';
+      card.classList.add('tilt-glow');
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.classList.remove('tilt-glow');
+    });
+  });
+})();
+
 
 </script>
 </body>
