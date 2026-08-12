@@ -732,7 +732,6 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 /* tipografi: body mobile >=16px */
 @media(max-width:520px){body{font-size:16.5px}.section p.body{font-size:16.5px}.greek-box{padding:36px 22px 30px}}
 
-
 /* ================= REVISI v3 — VARIASI SCROLL + ORNAMEN YUNANI ================= */
 /* ---- horizontal reel (Sirene, Scylla) — desktop only ---- */
 .reel-section{overflow:clip}
@@ -829,20 +828,14 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 /* ---- route rail: terisi progresif saat scroll ---- */
 .map-panel.open #routeAnim{animation:none !important;transition:stroke-dashoffset 2.6s cubic-bezier(.22,1,.36,1)}
 
-
 /* pattern berlapis di atas gradient atmosfer */
 .atmo-warm.pt-meander{background-image:radial-gradient(ellipse 70% 58% at 50% 112%, rgba(201,162,39,.15), transparent 66%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M0 22h10v-8h8V6H6v14' fill='none' stroke='%23C9A227' stroke-width='1' opacity='.07'/%3E%3Cpath d='M28 6H18v8h-8v8h12V8' fill='none' stroke='%23C9A227' stroke-width='1' opacity='.05'/%3E%3C/svg%3E")}
 .atmo-olive.pt-mosaic{background-image:radial-gradient(ellipse 60% 50% at 50% 112%, rgba(126,156,96,.11), transparent 66%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Crect x='1' y='1' width='19' height='19' fill='none' stroke='%233FD8E8' stroke-width='.7' opacity='.06'/%3E%3Ccircle cx='32.5' cy='32.5' r='9' fill='none' stroke='%23C9A227' stroke-width='.7' opacity='.07'/%3E%3Cpath d='M0 44V0M44 44V0' stroke='%23F5F3EE' stroke-width='.5' opacity='.05'/%3E%3C/svg%3E")}
 
-
 /* ================= REVISI v4 — EFEK 3D ================= */
 #hero3d{position:absolute;right:3%;bottom:8%;width:min(360px,32vw);height:min(360px,32vw);z-index:1;pointer-events:none;opacity:.9}
 #hero3d canvas{width:100% !important;height:100% !important;display:block}
-#eye3d{position:absolute;right:-16px;bottom:-14px;width:150px;height:150px;pointer-events:none;z-index:2}
-#eye3d canvas{width:100% !important;height:100% !important;display:block}
-#vortex3d{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:230px;height:230px;pointer-events:none;z-index:2;opacity:.85}
-#vortex3d canvas{width:100% !important;height:100% !important;display:block}
-@media(max-width:880px){#hero3d,#eye3d,#vortex3d{display:none}}
+@media(max-width:880px){#hero3d{display:none}}
 /* tilt holografik kartu */
 .tilt3d{transform-style:preserve-3d;will-change:transform;transition:transform .16s ease-out, box-shadow .3s ease}
 .tilt3d.tilt-glow{box-shadow:0 26px 70px rgba(0,0,0,.55), 0 0 40px rgba(201,162,39,.20)}
@@ -851,7 +844,6 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 </style>
 </head>
 <body>
-
 
 <!-- ===== SVG DEFS (shared) ===== -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1227,8 +1219,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
       <div class="quote-chip reveal" data-delay="3">Sikelia · negeri Cyclops</div>
     </div>
     <div class="chapter-art reveal" data-delay="2">
-      <div id="eye3d" aria-hidden="true"></div>
-      <div class="halo"></div>
+            <div class="halo"></div>
       <svg viewBox="0 0 240 240"><use href="#ill-cyclops"/></svg>
     </div>
   </div>
@@ -1340,8 +1331,7 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
         <div class="quote-chip reveal" data-delay="1">Selat antara Sikelia &amp; Italia</div>
       </div>
       <div class="reel-panel reel-panel-art">
-        <div id="vortex3d" aria-hidden="true"></div>
-        <div class="halo">
+                <div class="halo">
       </div>
     </div>
     <div class="reel-progress" aria-hidden="true"><i></i></div>
@@ -1901,7 +1891,6 @@ const WAYPOINTS = [
   }
 })();
 
-
 /* ================= REVISI v3 — REEL SCROLL, ZOOM, PARALLAX, ROUTE RAIL ================= */
 (function(){
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1971,7 +1960,6 @@ const WAYPOINTS = [
   update();
 })();
 
-
 /* ================= REVISI v4 — THREE.JS: KAPAL 3D, MATA CYCLOPS, VORTEX, TILT ================= */
 (function(){
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2034,49 +2022,12 @@ const WAYPOINTS = [
       update(t){ ship.position.y = Math.sin(t*0.7)*0.09; ship.rotation.z = Math.sin(t*0.5)*0.035; ship.rotation.y += (ship.userData.ty - ship.rotation.y)*0.06; } });
   })();
 
-  /* ---- scene 2: mata Cyclops ---- */
-  (function(){
-    const el = document.getElementById('eye3d');
-    if(!el) return;
-    const scene = new THREE.Scene();
-    const cam = makeCam(45); cam.position.set(0,0,3.6);
-    const ren = makeRenderer(el);
-    const g = new THREE.Group();
-    const wire = new THREE.Mesh(new THREE.SphereGeometry(1,18,13), new THREE.MeshBasicMaterial({color:0xff3b22, wireframe:true, transparent:true, opacity:.85}));
-    const core = new THREE.Mesh(new THREE.SphereGeometry(0.5,14,10), new THREE.MeshBasicMaterial({color:0xff8a4a, transparent:true, opacity:.55}));
-    g.add(wire, core);
-    scene.add(g);
-    const s = { el, scene, camera:cam, renderer:ren, g, active:false, kind:'eye', scale:0.4, target:0.4,
-      update(t){ g.rotation.y = t*0.5; g.rotation.x = Math.sin(t*0.4)*0.15; this.scale += (this.target - this.scale)*0.06; g.scale.setScalar(this.scale); } };
-    scenes.push(s);
-  })();
-
-  /* ---- scene 3: vortex Scylla ---- */
-  (function(){
-    const el = document.getElementById('vortex3d');
-    if(!el) return;
-    const scene = new THREE.Scene();
-    const cam = makeCam(45); cam.position.set(0,0.4,4.2); cam.lookAt(0,0,0);
-    const ren = makeRenderer(el);
-    const g = new THREE.Group();
-    const torus = new THREE.Mesh(new THREE.TorusGeometry(1.25,0.15,10,28), new THREE.MeshBasicMaterial({color:0x3FD8E8, wireframe:true, transparent:true, opacity:.9}));
-    const ring = new THREE.Mesh(new THREE.RingGeometry(0.62,0.8,30), new THREE.MeshBasicMaterial({color:0xC9A227, wireframe:true, transparent:true, opacity:.5}));
-    ring.rotation.x = -Math.PI/2.2;
-    const core2 = new THREE.Mesh(new THREE.SphereGeometry(0.28,10,8), new THREE.MeshBasicMaterial({color:0x3FD8E8, transparent:true, opacity:.4}));
-    g.add(torus, ring, core2);
-    scene.add(g);
-    const s = { el, scene, camera:cam, renderer:ren, g, active:false, kind:'vortex', scale:0.3, target:0.3,
-      update(t){ g.rotation.z = t*0.7; torus.rotation.x = 1.25 + Math.sin(t*0.6)*0.08; ring.rotation.z = -t*0.4; g.position.y = Math.sin(t*0.5)*0.06; this.scale += (this.target-this.scale)*0.06; g.scale.setScalar(this.scale); } };
-    scenes.push(s);
-  })();
-
   /* ---- observer: aktifkan scene saat masuk viewport ---- */
   const io = new IntersectionObserver(es => {
     es.forEach(e => {
       const s = scenes.find(x => x.el === e.target);
       if(!s) return;
       s.active = e.isIntersecting;
-      if(s.kind === 'eye' || s.kind === 'vortex') s.target = e.isIntersecting ? 1.55 : 0.4;
     });
   }, { rootMargin:'240px 0px 240px 0px' });
   scenes.forEach(s => io.observe(s.el));
@@ -2134,7 +2085,6 @@ const WAYPOINTS = [
     });
   });
 })();
-
 
 </script>
 </body>
