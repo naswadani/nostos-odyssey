@@ -545,8 +545,7 @@ footer .credit{
 /* ============ RESPONSIVE ============ */
 @media (max-width:880px){
   .chapter-grid{grid-template-columns:1fr}
-  .chapter-grid.flip .chapter-art{order:0}
-  .chapter-art{order:-1}
+  .chapter-grid .chapter-art,.chapter-grid.flip .chapter-art{order:2}
   .chapter-art svg{max-width:240px}
   .grec{font-size:clamp(56px,22vw,90px);top:10px}
   .dotnav{display:none}
@@ -584,8 +583,10 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 /* ---- LAYER ATMOSFER PER SECTION ---- */
 .section,.hero{isolation:isolate}
 .section-atmo{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.section>:not(.section-atmo),.hero>*{position:relative;z-index:1}
+.section>:not(.section-atmo):not(.col-wire):not(.grec),.hero>*{position:relative;z-index:1}
 .chapter-grid{position:relative;z-index:1}
+.grec{z-index:1}
+.col-wire{position:absolute;z-index:1;top:8%;bottom:8%;width:56px;opacity:.55;pointer-events:none;animation:col-blink 4.5s ease-in-out infinite}
 .section:not(.in-view) .section-atmo,.section:not(.in-view) .section-atmo *,.section:not(.in-view) .col-wire{animation-play-state:paused}
 
 /* api/abu — Troya */
@@ -687,7 +688,6 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
 #penutup.harbor-on .grec{filter:drop-shadow(0 0 34px rgba(201,162,39,.6))}
 
 /* kolom wireframe hologram */
-.col-wire{position:absolute;z-index:0;top:8%;bottom:8%;width:56px;opacity:.55;pointer-events:none;animation:col-blink 4.5s ease-in-out infinite}
 .col-wire svg{height:100%;width:100%;overflow:visible}
 .col-wire.left{left:2%}
 .col-wire.right{right:2%}
@@ -1396,18 +1396,18 @@ h1.nostos{filter:drop-shadow(0 0 46px rgba(201,162,39,.5))}
     <path d="M0 17h40l8 8h24l8-8h40" fill="none" stroke="url(#goldGrad)" stroke-width="1.6" opacity=".85"/>
   </svg>
 </div>
-<section class="section" id="penutup" style="text-align:center;padding-bottom:40px">
+<section class="section" id="penutup" style="text-align:center;padding-top:150px;padding-bottom:40px">
   <div class="section-atmo atmo-harbor" aria-hidden="true"></div>
   <div class="col-wire left" aria-hidden="true"><svg viewBox="0 0 60 320" fill="none"><path d="M18 0v320M42 0v320" stroke="#3FD8E8" stroke-width="1" opacity=".75" stroke-dasharray="3 5"/><path d="M8 28h50M8 292h50" stroke="#3FD8E8" stroke-width=".8" opacity=".55"/><path d="M13 50h34M13 270h34" stroke="#C9A227" stroke-width=".7" opacity=".45"/><ellipse cx="30" cy="28" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/><ellipse cx="30" cy="292" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/></svg></div>
   <div class="col-wire right" aria-hidden="true"><svg viewBox="0 0 60 320" fill="none"><path d="M18 0v320M42 0v320" stroke="#3FD8E8" stroke-width="1" opacity=".75" stroke-dasharray="3 5"/><path d="M8 28h50M8 292h50" stroke="#3FD8E8" stroke-width=".8" opacity=".55"/><path d="M13 50h34M13 270h34" stroke="#C9A227" stroke-width=".7" opacity=".45"/><ellipse cx="30" cy="28" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/><ellipse cx="30" cy="292" rx="20" ry="4.5" stroke="#3FD8E8" stroke-width=".8" opacity=".55" fill="none"/></svg></div>
   <div class="grec" style="left:50%;transform:translateX(-50%);right:auto">Ξ</div>
-  <div style="display:flex;justify-content:center;margin-bottom:30px" class="reveal">
-    <svg viewBox="0 0 240 240" style="width:220px;height:auto"><use href="#ill-laurel"/></svg>
-  </div>
   <h2 class="section-title reveal" style="max-width:760px;margin-left:auto;margin-right:auto">Nostos: <em>Pulang Adalah Mengingat Siapa Kita</em></h2>
   <p class="body reveal" data-delay="1" style="margin:0 auto;max-width:58ch">
     <b style="color:var(--gold-soft);font-weight:500">νόστος</b> bukan sekadar kembali ke rumah — ia adalah ingatan akan jati diri ketika dunia berusaha melupakannya. Di balik setiap pelayaran ada Ithaca; di balik setiap Ithaca, ada yang menunggu dengan setia. Sepanjang dua puluh tahun, Odysseus bertahan bukan karena kekuatannya, melainkan karena ia tak pernah benar-benar kehilangan arah pulang.
   </p>
+  <div style="display:flex;justify-content:center;margin-top:44px" class="reveal" data-delay="2">
+    <svg viewBox="0 0 240 240" style="width:200px;height:auto"><use href="#ill-laurel"/></svg>
+  </div>
 </section>
 
 <footer>
